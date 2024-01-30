@@ -74,29 +74,30 @@ fun LoginScreen(navController: NavHostController) {
 
                 }
             }
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        Row (
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val text1 =
-                if (showLoginForm.value) "¿No tienes cuenta?"
-                else "¿Ya tienes cuenta?"
+            Spacer(modifier = Modifier.height(15.dp))
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val text1 =
+                    if (showLoginForm.value) "¿No tienes cuenta?"
+                    else "¿Ya tienes cuenta?"
 
-            val text2 =
-                if (showLoginForm.value) "Regístrate"
-                else "Inicia sesión"
-            Text(text = text1)
-            Text(text = text2,
-                modifier = Modifier
-                    .clickable { showLoginForm.value = !showLoginForm.value }
-                    .padding(start = 5.dp),
-                color = MaterialTheme.colorScheme.secondary
-            )
+                val text2 =
+                    if (showLoginForm.value) "Regístrate"
+                    else "Inicia sesión"
+                Text(text = text1)
+                Text(text = text2,
+                    modifier = Modifier
+                        .clickable { showLoginForm.value = !showLoginForm.value }
+                        .padding(start = 5.dp),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
         }
     }
 }
+
 
 
 @OptIn(ExperimentalComposeUiApi::class)
