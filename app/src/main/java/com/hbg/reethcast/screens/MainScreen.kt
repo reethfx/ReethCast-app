@@ -10,7 +10,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun MainScreen(navController: NavController) {
     LaunchedEffect(key1 = true) {
-        delay(3500L)
+        delay(1200L)
         navController.navigate(ReethcastScreens.LoginScreen.name)
     }
 }
