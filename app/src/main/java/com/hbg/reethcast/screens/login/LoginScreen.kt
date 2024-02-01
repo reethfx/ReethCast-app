@@ -3,9 +3,8 @@
 package com.hbg.reethcast.screens.login
 
 import android.annotation.SuppressLint
-import android.inputmethodservice.Keyboard
 import android.util.Log
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,46 +36,72 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.hbg.reethcast.R
+import com.hbg.reethcast.navegation.ReethcastScreens
 
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(
+    navController: NavHostController,
+    viewModel: LoginScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+
     val showLoginForm = rememberSaveable {
         mutableStateOf(true)
     }
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-
+        color = Color(0xFF0D031F)
     ) {
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Image(
+                painter = painterResource(id = R.mipmap.ic_logo_reethcast),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(150.dp)
+                    .padding(8.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
             if (showLoginForm.value) {
-                Text(text = "Inicia sesión")
+                Text(text = "Inicia sesión", color = Color(0xFF922DAD))
                 UserForm(
                     isCreateAccount = false
                 ) { email, password ->
                    Log.d("ReethCast", "Logged with $email and $password")
+                    viewModel.signInWithEmailAndPassword(email, password) {
+                        navController.navigate(ReethcastScreens.HomeScreen.name)
+                    }
                 }
             } else {
-                Text(text = "Crea una cuenta")
+                Text(text = "Crea una cuenta", color = Color(0xFF922DAD) )
                 UserForm(
                     isCreateAccount = true
                 ) { email, password ->
                     Log.d("ReethCast", "Account created with $email and $password")
-
+                    viewModel.createUserWithEmailAndPassword(email, password) {
+                        navController.navigate(ReethcastScreens.HomeScreen.name)
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Row (
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
@@ -86,19 +113,17 @@ fun LoginScreen(navController: NavHostController) {
                 val text2 =
                     if (showLoginForm.value) "Regístrate"
                     else "Inicia sesión"
-                Text(text = text1)
+                Text(text = text1, color = Color(0xFFededed))
                 Text(text = text2,
                     modifier = Modifier
                         .clickable { showLoginForm.value = !showLoginForm.value }
                         .padding(start = 5.dp),
-                    color = MaterialTheme.colorScheme.secondary
+                    color = Color(0xFF922DAD)
                 )
             }
         }
     }
 }
-
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("RememberReturnType")
@@ -132,7 +157,7 @@ fun UserForm(
         )
         SubmitButton(
             textId = if (isCreateAccount) "Crear cuenta" else "Accede a tu cuenta",
-            validatedInput = validated
+            validatedInput = validated,
         ){
             onDone(email.value.trim(), password.value.trim())
             keyboardController?.hide()
@@ -144,7 +169,7 @@ fun UserForm(
 fun SubmitButton(
     textId: String,
     validatedInput: Boolean,
-    onConfirm: () ->Unit
+    onConfirm: () -> Unit
 ) {
     Button(onClick = onConfirm,
         modifier = Modifier
@@ -152,10 +177,12 @@ fun SubmitButton(
             .fillMaxWidth(),
         shape = CircleShape,
         enabled = validatedInput,
+        colors = ButtonDefaults.buttonColors(Color(0xFFC15BD3))
+
     ) {
         Text(text = textId,
             modifier = Modifier
-                .padding(5.dp)
+                .padding(5.dp),
         )
 
     }
@@ -175,7 +202,8 @@ fun PasswordInput(
     OutlinedTextField(
         value = passwordState.value,
         onValueChange = {passwordState.value = it},
-        label = { Text(text = labelId)},
+        label = { Text(
+            text = labelId, color = Color(0xFFededed)) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password
@@ -183,6 +211,7 @@ fun PasswordInput(
         modifier = Modifier
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
             .fillMaxWidth(),
+
         shape = CircleShape,
                 visualTransformation = visualTransformation,
         trailingIcon = {
@@ -208,7 +237,8 @@ fun PasswordVisibleIcon(
     }) {
         Icon(
             imageVector = image,
-            contentDescription = "" )
+            contentDescription = "",
+            tint = Color(0xFFededed))
     }
 }
 
@@ -235,7 +265,7 @@ fun InputField(
     OutlinedTextField(
         value = valueState.value,
         onValueChange = {valueState.value = it},
-        label = { Text(text = labelId)},
+        label = { Text(text = labelId, color = Color(0xFFededed))},
         singleLine = isSingleLine,
         modifier = Modifier
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
