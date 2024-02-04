@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hbg.reethcast.R
+import com.hbg.reethcast.data.viewmodels.LoginScreenViewModel
 import com.hbg.reethcast.navegation.ReethcastScreens
 
 
@@ -201,9 +203,12 @@ fun PasswordInput(
 
     OutlinedTextField(
         value = passwordState.value,
-        onValueChange = {passwordState.value = it},
-        label = { Text(
-            text = labelId, color = Color(0xFFededed)) },
+        onValueChange = { passwordState.value = it },
+        label = {
+            Text(
+                text = labelId, color = Color(0xFFededed)
+            )
+        },
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password
@@ -211,16 +216,18 @@ fun PasswordInput(
         modifier = Modifier
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
             .fillMaxWidth(),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Magenta,
+        ),
 
         shape = CircleShape,
-                visualTransformation = visualTransformation,
+        visualTransformation = visualTransformation,
         trailingIcon = {
-            if (passwordState.value.isNotBlank()){
+            if (passwordState.value.isNotBlank()) {
                 PasswordVisibleIcon(passwordVisible)
-            }
-            else null
+            } else null
         }
-        )
+    )
 }
 
 @Composable
@@ -271,6 +278,9 @@ fun InputField(
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
             .fillMaxWidth(),
         shape = CircleShape,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Magenta,
+        ),
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType
         )

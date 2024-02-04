@@ -1,10 +1,10 @@
 package com.hbg.reethcast.navegation
 
+import HomeScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.hbg.reethcast.screens.home.HomeScreen
 import com.hbg.reethcast.screens.home.MainScreen
 import com.hbg.reethcast.screens.login.LoginScreen
 

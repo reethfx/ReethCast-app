@@ -1,4 +1,4 @@
-package com.hbg.reethcast.screens.login
+package com.hbg.reethcast.data.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

@@ -100,6 +100,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.1")
     implementation("com.google.firebase:firebase-storage-ktx:19.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1")
+    // implementation ("com.google.firebase:firebase-firestore-ktx:24.1.0")
+
 
     // Architectural Components
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
@@ -130,6 +132,10 @@ dependencies {
 
     // Media3
     implementation ("androidx.media3:media3-session:1.2.1")
+
+    //Coil
+    implementation ("io.coil-kt:coil-compose:1.3.2")
+
 
 
 }
