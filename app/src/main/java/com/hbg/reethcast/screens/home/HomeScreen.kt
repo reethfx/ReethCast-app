@@ -82,7 +82,7 @@ fun HomeScreen(
                     Song("10", "Painkiller", "Three Days Grace", "","https://i.scdn.co/image/ab67616d0000b2738443a724ced4e3bef303fb7a", ),
                     )
             ) { selectedSong ->
-                navController.navigate("songDetail/${selectedSong.tittle}/${selectedSong.artist}")
+                navController.navigate("playerScreen/${selectedSong.mediaId}/${selectedSong.tittle}/${selectedSong.artist}/${selectedSong.songUrl}/${selectedSong.image}")
             }
         }
     }
