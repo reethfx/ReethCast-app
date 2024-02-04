@@ -37,7 +37,6 @@ fun PlayerScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Imagen grande de la canción
         Image(
             painter = rememberImagePainter(
                 data = songUrl,
