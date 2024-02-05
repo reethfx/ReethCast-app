@@ -26,13 +26,14 @@ fun ReethcastNavigation(){
         composable(ReethcastScreens.HomeScreen.name){
             HomeScreen(navController = navController)
         }
-        composable("${ReethcastScreens.PlayerScreen.name}/{mediaId}/{tittle}/{artist}/{songUrl}/{image}",
+        composable("${ReethcastScreens.PlayerScreen.name}/{mediaId}/{tittle}/{artist}/{songUrl}/{image}/{duration}",
             arguments = listOf(
                 navArgument("mediaId") { type = NavType.StringType },
                 navArgument("tittle") { type = NavType.StringType },
                 navArgument("artist") { type = NavType.StringType },
                 navArgument("songUrl") { type = NavType.StringType },
-                navArgument("image") { type = NavType.StringType }
+                navArgument("image") { type = NavType.StringType },
+                navArgument("duration") { type = NavType.StringType }
                 )
         ) { backStackEntry ->
             PlayerScreen(navController,
@@ -40,7 +41,8 @@ fun ReethcastNavigation(){
                 backStackEntry.arguments?.getString("tittle"),
                 backStackEntry.arguments?.getString("artist"),
                 backStackEntry.arguments?.getString("songUrl"),
-                backStackEntry.arguments?.getString("image")
+                backStackEntry.arguments?.getString("image"),
+                backStackEntry.arguments?.getString("duration"),
             )
 
             val songUrl = backStackEntry.arguments?.getString("songUrl") ?: ""

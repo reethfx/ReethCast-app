@@ -28,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +51,8 @@ fun PlayerScreen(
     tittle: String?,
     artist: String?,
     songUrl: String?,
-    imageUrl: String?
+    imageUrl: String?,
+    duration: String?
 ) {
     var isPlaying by remember { mutableStateOf(false) }
     var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
@@ -59,7 +61,7 @@ fun PlayerScreen(
     Log.d("Reethcast", "Reproduciendo audio desde: $songUrl")
 
 
-    DisposableEffect(songUrl) {
+    LaunchedEffect(songUrl) {
         mediaPlayer?.release()
         mediaPlayer = MediaPlayer()
         mediaPlayer?.setDataSource(songUrl)
@@ -72,13 +74,17 @@ fun PlayerScreen(
         }
 
         mediaPlayer?.setOnCompletionListener {
-            isPlaying = false
+            isPlaying = true
             currentPosition = 0
             mediaPlayer?.seekTo(0)
         }
 
         mediaPlayer?.prepareAsync()
 
+    }
+
+    DisposableEffect(currentPosition) {
+        mediaPlayer?.seekTo(currentPosition)
         onDispose {
             mediaPlayer?.release()
             mediaPlayer = null
@@ -151,11 +157,16 @@ fun PlayerScreen(
 @Composable
 fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, onPlayPauseToggle: () -> Unit) {
     var progress by remember { mutableStateOf(0.0f) }
+    var currentTime by remember { mutableStateOf(0) }
+
 
     Slider(
         value = progress,
-        valueRange = 0f..duration.toFloat(),
-        onValueChange = { progress = it },
+        valueRange = 0f..100f,
+        onValueChange = { newValue ->
+            progress = newValue
+            currentTime = (duration * (newValue / 100)).toInt()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(end = 16.dp),
@@ -163,8 +174,8 @@ fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, on
             thumbColor = Color.White,
             activeTrackColor = Color.White,
             inactiveTrackColor = Color.Gray,
-            )
         )
+    )
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -176,14 +187,14 @@ fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, on
         Text(
             modifier = Modifier,
             color = Color.White,
-            text = "0:00",
+            text = formatMillis(currentTime),
             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp)
         )
 
         Text(
             modifier = Modifier,
             color = Color.White,
-            text = "2:00",
+            text = formatMillis(duration),
             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp)
         )
     }
@@ -238,4 +249,10 @@ fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, on
     }
 }
 
+@Composable
+fun formatMillis(millis: Int): String {
+    val minutes = millis / 60000
+    val seconds = (millis % 60000) / 1000
+    return "%d:%02d".format(minutes, seconds)
+}
 
