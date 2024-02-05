@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import kotlinx.coroutines.delay
 
 @Composable
 fun PlayerScreen(
@@ -158,14 +159,25 @@ fun PlayerScreen(
 fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, onPlayPauseToggle: () -> Unit) {
     var progress by remember { mutableStateOf(0.0f) }
     var currentTime by remember { mutableStateOf(0) }
+    var isPlaying by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(isPlaying) {
+        if (isPlaying) {
+            while (progress <= 1.0f) {
+                delay(1000)
+                progress += 1.0f / (duration / 1000)
+            }
+        }
+    }
 
 
     Slider(
         value = progress,
-        valueRange = 0f..100f,
+        valueRange = 0f..1f,
         onValueChange = { newValue ->
             progress = newValue
-            currentTime = (duration * (newValue / 100)).toInt()
+            currentTime = (duration * newValue).toInt()
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -222,7 +234,10 @@ fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, on
 
 
         IconButton(
-            onClick = { onPlayPauseToggle() },
+            onClick = {
+                isPlaying = !isPlaying
+                togglePlayPause(isPlaying)
+                      },
             modifier = Modifier.size(40.dp)
         ) {
             val icon = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow
@@ -247,6 +262,10 @@ fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, on
             )
         }
     }
+}
+
+fun togglePlayPause(playing: Boolean) {
+
 }
 
 @Composable
