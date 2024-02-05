@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 
@@ -164,6 +165,28 @@ fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, on
             inactiveTrackColor = Color.Gray,
             )
         )
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+
+        horizontalArrangement = Arrangement.SpaceBetween
+
+    ) {
+        Text(
+            modifier = Modifier,
+            color = Color.White,
+            text = "0:00",
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp)
+        )
+
+        Text(
+            modifier = Modifier,
+            color = Color.White,
+            text = "2:00",
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp)
+        )
+    }
 
     Row(
         modifier = Modifier
