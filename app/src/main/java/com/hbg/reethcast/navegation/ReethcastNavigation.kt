@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hbg.reethcast.screens.home.MainScreen
 import com.hbg.reethcast.screens.login.LoginScreen
+import com.hbg.reethcast.screens.player.PlayerScreen
 
 @Composable
 fun ReethcastNavigation(){
@@ -25,18 +26,23 @@ fun ReethcastNavigation(){
         composable(ReethcastScreens.HomeScreen.name){
             HomeScreen(navController = navController)
         }
-        composable(
-            route = "${ReethcastScreens.PlayerScreen.name}/{mediaId}/{title}/{artist}/{songUrl}",
+        composable("${ReethcastScreens.PlayerScreen.name}/{mediaId}/{tittle}/{artist}/{songUrl}/{image}",
             arguments = listOf(
                 navArgument("mediaId") { type = NavType.StringType },
                 navArgument("tittle") { type = NavType.StringType },
                 navArgument("artist") { type = NavType.StringType },
                 navArgument("songUrl") { type = NavType.StringType },
-            )
+                navArgument("image") { type = NavType.StringType }
+                )
         ) { backStackEntry ->
-            val mediaId = backStackEntry.arguments?.getString("mediaId") ?: ""
-            val tittle = backStackEntry.arguments?.getString("title") ?: ""
-            val artist = backStackEntry.arguments?.getString("artist") ?: ""
+            PlayerScreen(navController,
+                backStackEntry.arguments?.getString("mediaId"),
+                backStackEntry.arguments?.getString("tittle"),
+                backStackEntry.arguments?.getString("artist"),
+                backStackEntry.arguments?.getString("songUrl"),
+                backStackEntry.arguments?.getString("image")
+            )
+
             val songUrl = backStackEntry.arguments?.getString("songUrl") ?: ""
             val image = backStackEntry.arguments?.getString("image") ?: ""
         }
