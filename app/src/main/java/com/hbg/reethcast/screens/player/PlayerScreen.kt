@@ -22,6 +22,8 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -90,7 +92,7 @@ fun PlayerScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 75.dp),
+                .padding(top = 25.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -112,6 +114,7 @@ fun PlayerScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
+                    .padding(top = 25.dp)
             ) {
                 Text(
                     text = tittle ?: "",
@@ -146,6 +149,21 @@ fun PlayerScreen(
 
 @Composable
 fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, onPlayPauseToggle: () -> Unit) {
+    var progress by remember { mutableStateOf(0.0f) }
+
+    Slider(
+        value = progress,
+        valueRange = 0f..duration.toFloat(),
+        onValueChange = { progress = it },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 16.dp),
+        colors = SliderDefaults.colors(
+            thumbColor = Color.White,
+            activeTrackColor = Color.White,
+            inactiveTrackColor = Color.Gray,
+            )
+        )
 
     Row(
         modifier = Modifier
@@ -195,14 +213,6 @@ fun PlaybackControls(isPlaying: Boolean, duration: Int, currentPosition: Int, on
             )
         }
     }
-
-    SeekBar(duration = duration, currentPosition = currentPosition) { newPosition ->
-
-    }
 }
 
-@Composable
-fun SeekBar(duration: Int, currentPosition: Int, onSeek: (Int) -> Unit) {
-
-}
 
